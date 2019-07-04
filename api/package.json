@@ -1,0 +1,40 @@
+{
+  "name": "wayfarer",
+  "version": "1.0.0",
+  "description": "A public transportation booking app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manlikezlatan/WayFarer.git"
+  },
+  "keywords": [
+    "trip",
+    "booking",
+    "user",
+    "transportation"
+  ],
+  "author": "Ibrahim Babatunde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manlikezlatan/WayFarer/issues"
+  },
+  "homepage": "https://github.com/manlikezlatan/WayFarer#readme",
+  "dependencies": {
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "babel": "^6.23.0",
+    "cli": "^1.0.1",
+    "express": "^4.17.1",
+    "mocha": "^6.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "nodemon": "^1.19.1"
+  }
+}
