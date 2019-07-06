@@ -26,15 +26,19 @@
   "dependencies": {
     "@babel/core": "^7.5.0",
     "@babel/node": "^7.5.0",
+    "@babel/polyfill": "^7.4.4",
     "@babel/preset-env": "^7.5.0",
     "babel": "^6.23.0",
     "cli": "^1.0.1",
     "express": "^4.17.1",
-    "mocha": "^6.1.4"
+    "mocha": "^6.1.4",
+    "swagger": "^0.7.5",
+    "swagger-ui-express": "^4.0.7"
   },
   "devDependencies": {
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
     "nodemon": "^1.19.1"
   }
 }
