@@ -5,6 +5,7 @@ import '@babel/polyfill'
 import bodyParser from 'body-parser';
 import usersRoute from './routes/userRoutes';
 import adminRoute from './routes/adminRoutes';
+import tripRoute from './routes/tripRoutes';
 
 dotenv.config();
 const app = express();
@@ -28,5 +29,6 @@ app.listen(port, () => {
 app.use('/api/v1/signup', usersRoute);
 app.use('/api/v1/signin', usersRoute);
 app.use('/api/v1/admin/signup', adminRoute);
+app.use('/api/v1/trips', tripRoute);
 
 export default app;
