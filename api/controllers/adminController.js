@@ -89,7 +89,7 @@ const Admin = {
     const { is_admin } = req.user;
 
     if (!is_admin === true) {
-      errorMessage.error = 'Sorry You are unauthorized to make a user an admin';
+      errorMessage.error = 'Sorry, you are not authorized to make a user an admin';
       return res.status(status.bad).send(errorMessage);
     }
     if (isAdmin === '') {
