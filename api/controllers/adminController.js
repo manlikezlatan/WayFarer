@@ -103,7 +103,7 @@ const Admin = {
       const { rows } = await dbQuery.query(findUserQuery, [id]);
       const dbResponse = rows[0];
       if (!dbResponse) {
-        errorMessage.error = 'User Cannot be found';
+        errorMessage.error = 'User cannot be found';
         return res.status(status.notfound).send(errorMessage);
       }
       const values = [
