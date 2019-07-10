@@ -114,7 +114,7 @@ const createBookingsTable = () => {
  * Drop Users Table
  */
 const dropUsersTable = () => {
-  const usersDropQuery = 'DROP TABLE IF EXISTS users returning *';
+  const usersDropQuery = 'DROP TABLE IF EXISTS users';
   pool.query(usersDropQuery)
     .then((res) => {
       console.log(res);
@@ -130,7 +130,7 @@ const dropUsersTable = () => {
  * Drop Buses Table
  */
 const dropBusTable = () => {
-  const busDropQuery = 'DROP TABLE IF EXISTS bus returning *';
+  const busDropQuery = 'DROP TABLE IF EXISTS bus';
   pool.query(busDropQuery)
     .then((res) => {
       console.log(res);
@@ -146,7 +146,7 @@ const dropBusTable = () => {
  * Drop Trips Table
  */
 const dropTripsTable = () => {
-  const tripDropQuery = 'DROP TABLE IF EXISTS trip returning *';
+  const tripDropQuery = 'DROP TABLE IF EXISTS trip';
   pool.query(tripDropQuery)
     .then((res) => {
       console.log(res);
@@ -162,7 +162,7 @@ const dropTripsTable = () => {
  * Drop Buses Table
  */
 const dropBookingsTable = () => {
-  const bookingDropQuery = 'DROP TABLE IF EXISTS booking returning *';
+  const bookingDropQuery = 'DROP TABLE IF EXISTS booking';
   pool.query(bookingDropQuery)
     .then((res) => {
       console.log(res);
