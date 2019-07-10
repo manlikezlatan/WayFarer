@@ -5,7 +5,7 @@ import auth from '../middleware/auth';
 const router = express.Router();
 
 //Routes for buses
-router.post('/', auth, addBusDetails);
-router.get('/', auth, getAllBuses);
+router.post('/', auth.verifyToken, Buses.addBusDetails);
+router.get('/', auth.verifyToken, Buses.getAllBuses);
 
 export default router;

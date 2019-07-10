@@ -102,7 +102,7 @@ const Users = {
       }
       const token = Helper.generateToken(rows[0].id);
       return res.status(200).json({
-        status: 'success',
+        status: 'error',
         data: { token }
       });
     } catch (error) {

@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import usersRoute from './routes/userRoutes';
 import adminRoute from './routes/adminRoutes';
 import tripRoute from './routes/tripRoutes';
-import busRoute from './app/routes/busRoute';
+import busRoute from './routes/busRoutes';
 
 dotenv.config();
 const app = express();
