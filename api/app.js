@@ -2,11 +2,11 @@ import express from 'express';
 
 const app = express();
 
-const PORT = 7000;
+app.use(express.json());
 
 app.get('/', (req, res) => {
-    return res.send ('The API is necessary to run this application');
-})
+  return res.status(200).send({'message': 'YAY! Congratulations! Your first endpoint is working'});
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running in port ${PORT} `);
