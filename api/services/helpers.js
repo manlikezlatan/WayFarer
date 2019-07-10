@@ -11,6 +11,11 @@ const Helper = {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
   },
 
+  /**
+   * validatePassword helper method
+   * @param {string} password
+   * @returns {Boolean} True or False
+   */
   validatePassword(password) {
     if (password.length <= 8 || password === '') {
       return false;
@@ -33,6 +38,19 @@ const Helper = {
    */
   isValidEmail(email) {
     return /\S+@\S+\.\S+/.test(email);
+  },
+  /**
+   * isEmpty method
+   * @param {string, integer} input
+   * @returns {Boolean} True or False
+   */
+  isEmpty(input) {
+    if (input === undefined || input === '') {
+      return true;
+    }
+    if (input.replace(/\s/g, '').length) {
+      return false;
+    } return true;
   },
   /**
    * Generate Token

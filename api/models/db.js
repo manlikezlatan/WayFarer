@@ -91,7 +91,7 @@ const createTripsTable = () => {
  */
 const createBookingsTable = () => {
   const bookingCreateQuery =
-    `CREATE TABLE IF NOT EXISTS booking
+    `CREATE TABLE IF NOT EXISTS bookings
       (booking_id SERIAL, 
       trip_id INTEGER REFERENCES trip(trip_id) ON DELETE CASCADE,
       user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
