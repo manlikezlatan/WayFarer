@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import '@babel/polyfill'
 import bodyParser from 'body-parser';
 import usersRoute from './routes/userRoutes';
+import adminRoute from './routes/adminRoutes';
 
 dotenv.config();
 const app = express();
@@ -24,7 +25,8 @@ app.listen(port, () => {
   console.log(`This server is live on ${port}`);
 });
 
-app.use('/api/v1/users', usersRoute);
-app.use('/api/v1/users/signin', usersRoute);
+app.use('/api/v1/signup', usersRoute);
+app.use('/api/v1/signin', usersRoute);
+app.use('/api/v1/admin/signup', adminRoute);
 
 export default app;

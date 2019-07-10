@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../models/db';
 
-const Auth = {
+const auth = {
   /**
    * Verify Token
    * @param {object} req 
@@ -21,7 +21,13 @@ const Auth = {
       if(!rows[0]) {
         return res.status(400).send({ 'message': 'The token you provided is invalid' });
       }
-      req.user = { id: decoded.userId };
+      req.user = { 
+        user_id: decoded.user_id, 
+        email: decoded.email,
+        first_name: decoded.first_name, 
+        last_name: decoded.last_name,
+        is_admin: decoded.is_admin, 
+      };
       next();
     } catch(error) {
       return res.status(400).send(error);
@@ -29,4 +35,4 @@ const Auth = {
   }
 }
 
-export default Auth;
+export default auth;
