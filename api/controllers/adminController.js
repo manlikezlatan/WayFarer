@@ -1,21 +1,10 @@
 import moment from 'moment';
 import db from '../models/query';
-
-import {
-  hashPassword,
-  isValidEmail,
-  validatePassword,
-  isEmpty,
-  generateUserToken,
-} from '../services/helpers';
-
-import {
-  errorMessage, successMessage, status,
-} from '../services/status';
+import Helper from '../services/helpers';
 
 const Admin = {
   /**
-     * Create A Admin
+     * Create an Admin
      * @param {object} req
      * @param {object} res
      * @returns {object} reflection object
@@ -30,27 +19,35 @@ const Admin = {
     const created_on = moment(new Date());
 
     if (!is_admin === true) {
-      errorMessage.error = 'Sorry You are unauthorized to create an admin';
-      return res.status(status.bad).send(errorMessage);
+      return res.status(400).json({
+        status: 'error',
+        error: 'Sorry You are unauthorized to create an admin'
+      });
     }
 
-    if (isEmpty(email) || isEmpty(first_name) || isEmpty(last_name) || isEmpty(password)) {
-      errorMessage.error = 'Email, password, first name and last name field cannot be empty';
-      return res.status(status.bad).send(errorMessage);
+    if (Helper.isEmpty(email) || Helper.isEmpty(first_name) || Helper.isEmpty(last_name) || Helper.isEmpty(password)) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Email, password, first name and last name field cannot be empty'
+      });
     }
-    if (!isValidEmail(email)) {
-      errorMessage.error = 'Please enter a valid Email';
-      return res.status(status.bad).send(errorMessage);
+    if (!Helper.isValidEmail(email)) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Please enter a valid Email'
+      });
     }
-    if (!validatePassword(password)) {
-      errorMessage.error = 'Password must be more than five(5) characters';
-      return res.status(status.bad).send(errorMessage);
+    if (!Helper.validatePassword(password)) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Password must be more than five(5) characters'
+      });
     }
-    const hashedPassword = hashPassword(password);
+    const hashedPassword = Helper.hashPassword(password);
     const createAdminQuery = `INSERT INTO
-      users(email, first_name, last_name, password, is_admin, created_on)
-      VALUES($1, $2, $3, $4, $5, $6)
-      returning *`;
+    users(email, first_name, last_name, password, is_admin, created_on)
+    VALUES($1, $2, $3, $4, $5, $6)
+    returning *`;
     const values = [
       email,
       first_name,
@@ -62,22 +59,25 @@ const Admin = {
 
     try {
       const { rows } = await db.query(createAdminQuery, values);
-      const dbResponse = rows[0];
-      delete dbResponse.password;
-      const token = generateUserToken(dbResponse.email, dbResponse.user_id, dbResponse.is_admin, dbResponse.first_name, dbResponse.last_name);
-      successMessage.data = dbResponse;
-      successMessage.data.token = token;
-      return res.status(status.created).send(successMessage);
+      delete rows[0].password;
+      const token = Helper.generateToken(rows[0].id);
+      return res.status(201).json({
+        status: 'success',
+        message: 'Your admin has been created successful',
+        data: { token }
+      });
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
-        errorMessage.error = 'Admin with that EMAIL already exist';
-        return res.status(status.conflict).send(errorMessage);
+        return res.status(409).json({
+          status: 'error',
+          error: 'Admin with that EMAIL already exist'
+        });
       }
     }
   },
 
   /**
-   * Update A User to Admin
+   * Update a User to Admin
    * @param {object} req 
    * @param {object} res 
    * @returns {object} updated user
@@ -85,39 +85,47 @@ const Admin = {
   async updateUserToAdmin(req, res) {
     const { id } = req.params;
     const { isAdmin } = req.body;
-
     const { is_admin } = req.user;
 
     if (!is_admin === true) {
-      errorMessage.error = 'Sorry, you are not authorized to make a user an admin';
-      return res.status(status.bad).send(errorMessage);
+      return res.status(400).json({
+        status: 'error',
+        error: 'Sorry, you are not authorized to make a user an admin'
+      });
     }
     if (isAdmin === '') {
-      errorMessage.error = 'Admin Status is needed';
-      return res.status(status.bad).send(errorMessage);
+      return res.status(400).json({
+        status: 'error',
+        error: 'Admin status is needed'
+      });
     }
     const findUserQuery = 'SELECT * FROM users WHERE user_id=$1';
-    const updateUser = `UPDATE users
-        SET is_admin=$1 WHERE user_id=$2 returning *`;
+    const updateUser = `UPDATE users SET is_admin=$1 WHERE user_id=$2 returning *`;
     try {
-      const { rows } = await dbQuery.query(findUserQuery, [id]);
-      const dbResponse = rows[0];
-      if (!dbResponse) {
-        errorMessage.error = 'User cannot be found';
-        return res.status(status.notfound).send(errorMessage);
+      const { rows } = await db.query(findUserQuery, [id]);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'User cannot be found'
+        });
       }
       const values = [
         isAdmin,
         id,
       ];
-      const response = await dbQuery.query(updateUser, values);
+      const response = await db.query(updateUser, values);
       const dbResult = response.rows[0];
       delete dbResult.password;
-      successMessage.data = dbResult;
-      return res.status(status.success).send(successMessage);
+      return res.status(200).json({
+        status: 'status',
+        message: 'User updated to admin successfully',
+        data: { dbResult }
+      });
     } catch (err) {
-      errorMessage.error = 'Operation was not successful';
-      return res.status(status.error).send(errorMessage);
+      return res.status(500).json({
+        status: 'error',
+        error: 'Operation was not successful'
+      });
     }
   }
 }
