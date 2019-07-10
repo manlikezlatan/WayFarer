@@ -96,6 +96,37 @@ const Trips = {
         });
       }
     },
+
+    /**
+     * Get All Trips
+     * @param {object} req 
+     * @param {object} res 
+     * @returns {object} trips array
+     */
+  async getAllTrips(req, res) {
+    const getAllTripsQuery = 'SELECT * FROM trip ORDER BY trip_id DESC';
+    try {
+      const { rows } = await dbQuery.query(getAllTripsQuery);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'There are currently no trips'
+        });
+      }
+      const trips = rows;
+      return res.status(200).json({
+        status: 'success',
+        data: {
+          trips,
+        }
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'An error Occured'
+      });
+    }
+  },
 }
 
 export default Trips;
