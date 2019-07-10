@@ -14,7 +14,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-  return res.status(200).send({
+  return res.status(200).json({
+    status: 'success',
     message: 'The API is necessary to run this application'
   });
 });
@@ -24,5 +25,6 @@ app.listen(port, () => {
 });
 
 app.use('/api/v1/users', usersRoute);
+app.use('/api/v1/users/signin', usersRoute);
 
 export default app;
