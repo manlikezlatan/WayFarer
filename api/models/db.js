@@ -33,7 +33,7 @@ const createUsersTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Create Buses Table
@@ -58,7 +58,7 @@ const createBusTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Create Trips Table
@@ -84,7 +84,7 @@ const createTripsTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Create Bookings Table
@@ -108,7 +108,7 @@ const createBookingsTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Drop Users Table
@@ -124,7 +124,7 @@ const dropUsersTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Drop Buses Table
@@ -140,7 +140,7 @@ const dropBusTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Drop Trips Table
@@ -156,7 +156,7 @@ const dropTripsTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Drop Buses Table
@@ -172,17 +172,17 @@ const dropBookingsTable = () => {
       console.log(err);
       pool.end();
     });
-};
+}
 
 /**
  * Create All Tables
  */
 const createAllTables = () => {
+  createBookingsTable();
   createUsersTable();
   createBusTable();
-  createBookingsTable();
   createTripsTable();
-};
+}
 
 /**
  * Drop All Tables
@@ -192,7 +192,7 @@ const dropAllTables = () => {
   dropBusTable();
   dropBookingsTable();
   dropTripsTable();
-};
+}
 
 pool.on('remove', () => {
   console.log('client removed');
