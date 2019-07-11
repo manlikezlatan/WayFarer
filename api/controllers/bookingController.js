@@ -61,29 +61,29 @@ const Bookings = {
     }
   },
 
-  /**
-     * Get All Bookings
-     * @param {object} req 
-     * @param {object} res 
-     * @returns {object} buses array
-     */
-    
+/**
+   * Get All Bookings
+   * @param {object} req 
+   * @param {object} res 
+   * @returns {object} buses array
+   */
+
   async getAllBookings(req, res) {
     const { is_admin, user_id } = req.user;
     if (!is_admin === true) {
       const getAllBookingsQuery = 'SELECT * FROM booking WHERE user_id = $1';
       try {
         const { rows } = await db.query(getAllBookingsQuery, [user_id]);
-        const allbookings = rows;
         if (rows[0] === undefined) {
           return res.status(404).json({
             status: 'error',
-            error: 'There are no bookings'
+            error: 'you have no bookings at the moment'
           });
         }
+        const userBookings = new Array.fill(rows);
         return res.status(200).json({
           status: 'success',
-          data: [{ allbookings }]
+          data: userBookings
         });
       } catch (error) {
         return res.status(500).json({
@@ -91,6 +91,28 @@ const Bookings = {
           error: 'Sorry, an error occured'
         });
       }
+    }
+    
+    //Admin can view all bookings
+    const getAllBookingsQuery = 'SELECT * FROM booking ORDER BY booking_id DESC';
+    try {
+      const { rows } = await db.query(getAllBookingsQuery);
+      if (rows[0] === undefined) {
+        return res.status(400).json({
+          status: 'error',
+          error: 'There are currently no bookings'
+        });
+      }
+      let allBookings = new Array.fill(rows);
+      return res.status(200).json({
+        status: 'success',
+        data: allBookings
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Sorry, an error occured'
+      });
     }
   },
 }
