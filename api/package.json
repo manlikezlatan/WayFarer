@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --exec babel-node app.js",
-    "create-tables": "node ./models/db createAllTables",
-    "drop-tables": "node ./models/db dropAllTables"
+    "create": "node ./models/db createAllTables",
+    "drop": "node ./models/db dropAllTables"
   },
   "repository": {
     "type": "git",

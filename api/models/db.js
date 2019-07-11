@@ -36,31 +36,6 @@ const createUsersTable = () => {
 }
 
 /**
- * Create Buses Table
- */
-const createBusTable = () => {
-  const busCreateQuery =
-    `CREATE TABLE IF NOT EXISTS buses
-    (bus_id SERIAL PRIMARY KEY,
-    number_plate VARCHAR(100) NOT NULL,
-    manufacturer VARCHAR(100) NOT NULL,
-    model VARCHAR(100) NOT NULL,
-    year VARCHAR(10) NOT NULL,
-    capacity integer NOT NULL,
-    created_on DATE NOT NULL)`;
-
-  pool.query(busCreateQuery)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-}
-
-/**
  * Create Trips Table
  */
 const createTripsTable = () => {
@@ -76,6 +51,31 @@ const createTripsTable = () => {
     created_on DATE NOT NULL)`;
 
   pool.query(tripCreateQuery)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+}
+
+/**
+ * Create Buses Table
+ */
+const createBusTable = () => {
+  const busCreateQuery =
+    `CREATE TABLE IF NOT EXISTS buses
+    (bus_id SERIAL PRIMARY KEY,
+    number_plate VARCHAR(100) NOT NULL,
+    manufacturer VARCHAR(100) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    year VARCHAR(10) NOT NULL,
+    capacity integer NOT NULL,
+    created_on DATE NOT NULL)`;
+
+  pool.query(busCreateQuery)
     .then((res) => {
       console.log(res);
       pool.end();
