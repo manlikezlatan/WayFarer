@@ -24,9 +24,9 @@ const Bookings = {
       });
     }
     const createBookingQuery = `INSERT INTO
-          booking(user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, created_on)
-          VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
-          returning *`;
+        booking(user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, created_on)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        returning *`;
     const values = [
       user_id,
       trip_id,
