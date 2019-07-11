@@ -61,12 +61,12 @@ const Bookings = {
     }
   },
 
-/**
-   * Get All Bookings
-   * @param {object} req 
-   * @param {object} res 
-   * @returns {object} buses array
-   */
+  /**
+     * Get All Bookings
+     * @param {object} req 
+     * @param {object} res 
+     * @returns {object} buses array
+     */
 
   async getAllBookings(req, res) {
     const { is_admin, user_id } = req.user;
@@ -92,7 +92,7 @@ const Bookings = {
         });
       }
     }
-    
+
     //Admin can view all bookings
     const getAllBookingsQuery = 'SELECT * FROM booking ORDER BY booking_id DESC';
     try {
@@ -107,6 +107,37 @@ const Bookings = {
       return res.status(200).json({
         status: 'success',
         data: allBookings
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Sorry, an error occured'
+      });
+    }
+  },
+
+  /**
+   * Delete A Booking
+   * @param {object} req 
+   * @param {object} res 
+   * @returns {void} return response booking deleted successfully
+   */
+  async deleteBooking(req, res) {
+    const { bookingId } = req.params;
+    const { user_id } = req.user;
+    const deleteBookingQuery = 'DELETE FROM booking WHERE booking_id=$1 AND user_id = $2 returning *';
+    try {
+      const { rows } = await db.query(deleteBookingQuery, [bookingId, user_id]);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'You have no booking with that particular id'
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        message: 'Your booking was deleted successfully',
+        data: {}
       });
     } catch (error) {
       return res.status(500).json({
