@@ -7,6 +7,7 @@ import usersRoute from './routes/userRoutes';
 import adminRoute from './routes/adminRoutes';
 import tripRoute from './routes/tripRoutes';
 import busRoute from './routes/busRoutes';
+import bookingRoute from './routes/bookingRoutes';
 
 dotenv.config();
 const app = express();
@@ -32,5 +33,6 @@ app.use('/api/v1/signin', usersRoute);
 app.use('/api/v1/admin/signup', adminRoute);
 app.use('/api/v1/trips', tripRoute);
 app.use('/api/v1/buses', busRoute);
+app.use('/api/v1/bookings', bookingRoute);
 
 export default app;
