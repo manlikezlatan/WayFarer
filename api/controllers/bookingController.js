@@ -60,6 +60,39 @@ const Bookings = {
       });
     }
   },
+
+  /**
+     * Get All Bookings
+     * @param {object} req 
+     * @param {object} res 
+     * @returns {object} buses array
+     */
+    
+  async getAllBookings(req, res) {
+    const { is_admin, user_id } = req.user;
+    if (!is_admin === true) {
+      const getAllBookingsQuery = 'SELECT * FROM booking WHERE user_id = $1';
+      try {
+        const { rows } = await db.query(getAllBookingsQuery, [user_id]);
+        const allbookings = rows;
+        if (rows[0] === undefined) {
+          return res.status(404).json({
+            status: 'error',
+            error: 'There are no bookings'
+          });
+        }
+        return res.status(200).json({
+          status: 'success',
+          data: [{ allbookings }]
+        });
+      } catch (error) {
+        return res.status(500).json({
+          status: 'error',
+          error: 'Sorry, an error occured'
+        });
+      }
+    }
+  },
 }
 
 export default Bookings;
