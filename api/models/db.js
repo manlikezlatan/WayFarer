@@ -7,22 +7,21 @@ const dbConfig = { connectionString: process.env.DATABASE_URL };
 const pool = new Pool(dbConfig);
 
 pool.on('connect', () => {
-  console.log('connected to wayfarer db');
+  console.log('connected to wayfarer database');
 });
 
 /**
  * Create Users Table
  */
 const createUsersTable = () => {
-  const userCreateQuery =
-    `CREATE TABLE IF NOT EXISTS users
-  (user_id SERIAL PRIMARY KEY, 
-  email VARCHAR(100) UNIQUE NOT NULL, 
-  first_name VARCHAR(100), 
-  last_name VARCHAR(100), 
-  password VARCHAR(100) NOT NULL,
-  is_admin BOOL DEFAULT(false),
-  created_on DATE NOT NULL)`;
+  const userCreateQuery = `CREATE TABLE IF NOT EXISTS users
+    (user_id BIGSERIAL PRIMARY KEY, 
+    email VARCHAR(100) UNIQUE NOT NULL, 
+    first_name VARCHAR(100), 
+    last_name VARCHAR(100), 
+    password VARCHAR(100) NOT NULL,
+    is_admin BOOLEAN DEFAULT(false),
+    created_on TIMESTAMP DEFAULT current_timestamp NOT NULL)`;
 
   pool.query(userCreateQuery)
     .then((res) => {
@@ -33,24 +32,47 @@ const createUsersTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
+
+/**
+ * Create Buses Table
+ */
+const createBusesTable = () => {
+  const userCreateQuery = `CREATE TABLE IF NOT EXISTS buses
+    (bus_id BIGSERIAL PRIMARY KEY, 
+    number_plate VARCHAR(100) NOT NULL,
+    manufacturer VARCHAR(100) NOT NULL,
+    model VARCHAR(100) NOT NULL,
+    year VARCHAR(10) NOT NULL,
+    capacity BIGINT DEFAULT 0 NOT NULL,
+    created_on TIMESTAMP DEFAULT current_timestamp NOT NULL)`;
+
+  pool.query(userCreateQuery)
+    .then((res) => {
+      console.log(res);
+      pool.end();
+    })
+    .catch((err) => {
+      console.log(err);
+      pool.end();
+    });
+};
 
 /**
  * Create Trips Table
  */
 const createTripsTable = () => {
-  const tripCreateQuery =
-    `CREATE TABLE IF NOT EXISTS trips
-    (trip_id SERIAL PRIMARY KEY, 
-    bus_id INTEGER REFERENCES bus(bus_id) ON DELETE CASCADE,
-    origin VARCHAR(300) NOT NULL, 
-    destination VARCHAR(300) NOT NULL,
+  const tripsCreateQuery = `CREATE TABLE IF NOT EXISTS trips 
+    (trip_id BIGSERIAL PRIMARY KEY,
+    bus_id BIGINT REFERENCES buses(bus_id) NOT NULL,
+    origin VARCHAR(255) NOT NULL,
+    destination VARCHAR(255) NOT NULL,
     trip_date DATE NOT NULL,
-    fare float NOT NULL,
-    status float DEFAULT(1.00),
-    created_on DATE NOT NULL)`;
+    fare FLOAT NOT NULL,
+    status FLOAT DEFAULT(1.00)
+  )`;
 
-  pool.query(tripCreateQuery)
+  pool.query(tripsCreateQuery)
     .then((res) => {
       console.log(res);
       pool.end();
@@ -59,45 +81,24 @@ const createTripsTable = () => {
       console.log(err);
       pool.end();
     });
-}
-
-/**
- * Create Buses Table
- */
-const createBusTable = () => {
-  const busCreateQuery =
-    `CREATE TABLE IF NOT EXISTS buses
-    (bus_id SERIAL PRIMARY KEY,
-    number_plate VARCHAR(100) NOT NULL,
-    manufacturer VARCHAR(100) NOT NULL,
-    model VARCHAR(100) NOT NULL,
-    year VARCHAR(10) NOT NULL,
-    capacity integer NOT NULL,
-    created_on DATE NOT NULL)`;
-
-  pool.query(busCreateQuery)
-    .then((res) => {
-      console.log(res);
-      pool.end();
-    })
-    .catch((err) => {
-      console.log(err);
-      pool.end();
-    });
-}
+};
 
 /**
  * Create Bookings Table
  */
 const createBookingsTable = () => {
-  const bookingCreateQuery =
-    `CREATE TABLE IF NOT EXISTS bookings
-      (booking_id SERIAL, 
-      trip_id INTEGER REFERENCES trip(trip_id) ON DELETE CASCADE,
-      user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
-      bus_id INTEGER REFERENCES bus(bus_id) ON DELETE CASCADE,
-      created_on DATE NOT NULL,
-      PRIMARY KEY (booking_id, trip_id, user_id, bus_id))`;
+  const bookingCreateQuery = `CREATE TABLE IF NOT EXISTS bookings
+  (booking_id BIGSERIAL NOT NULL, 
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, 
+    trip_id INTEGER REFERENCES trips(trip_id) ON DELETE CASCADE, 
+    bus_id INTEGER REFERENCES buses(bus_id) ON DELETE CASCADE, 
+    trip_date DATE NOT NULL, seat_number INTEGER UNIQUE, 
+    first_name VARCHAR(100) NOT NULL, 
+    last_name VARCHAR(100) NOT NULL, 
+    email VARCHAR(100) NOT NULL, 
+    created_on TIMESTAMP DEFAULT current_timestamp NOT NULL, 
+    PRIMARY KEY(trip_id, user_id)
+  )`;
 
   pool.query(bookingCreateQuery)
     .then((res) => {
@@ -108,7 +109,7 @@ const createBookingsTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
 
 /**
  * Drop Users Table
@@ -124,14 +125,14 @@ const dropUsersTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
 
 /**
  * Drop Buses Table
  */
-const dropBusTable = () => {
-  const busDropQuery = 'DROP TABLE IF EXISTS bus';
-  pool.query(busDropQuery)
+const dropBusesTable = () => {
+  const busesDropQuery = 'DROP TABLE IF EXISTS buses';
+  pool.query(busesDropQuery)
     .then((res) => {
       console.log(res);
       pool.end();
@@ -140,14 +141,14 @@ const dropBusTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
 
 /**
  * Drop Trips Table
  */
 const dropTripsTable = () => {
-  const tripDropQuery = 'DROP TABLE IF EXISTS trip';
-  pool.query(tripDropQuery)
+  const tripsDropQuery = 'DROP TABLE IF EXISTS trips';
+  pool.query(tripsDropQuery)
     .then((res) => {
       console.log(res);
       pool.end();
@@ -156,14 +157,14 @@ const dropTripsTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
 
 /**
- * Drop Buses Table
+ * Drop Bookings Table
  */
 const dropBookingsTable = () => {
-  const bookingDropQuery = 'DROP TABLE IF EXISTS booking';
-  pool.query(bookingDropQuery)
+  const bookingsDropQuery = 'DROP TABLE IF EXISTS bookings';
+  pool.query(bookingsDropQuery)
     .then((res) => {
       console.log(res);
       pool.end();
@@ -172,27 +173,28 @@ const dropBookingsTable = () => {
       console.log(err);
       pool.end();
     });
-}
+};
+
 
 /**
  * Create All Tables
  */
 const createAllTables = () => {
-  createBookingsTable();
   createUsersTable();
-  createBusTable();
+  createBusesTable();
   createTripsTable();
-}
+  createBookingsTable();
+};
 
 /**
  * Drop All Tables
  */
 const dropAllTables = () => {
   dropUsersTable();
-  dropBusTable();
-  dropBookingsTable();
+  dropBusesTable();
   dropTripsTable();
-}
+  dropBookingsTable();
+};
 
 pool.on('remove', () => {
   console.log('client removed');
@@ -201,7 +203,7 @@ pool.on('remove', () => {
 
 module.exports = {
   createAllTables,
-  dropAllTables,
+  dropAllTables
 };
 
 require('make-runnable');
