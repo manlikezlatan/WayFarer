@@ -57,7 +57,7 @@ const Helper = {
    * empty helper method
    * @param {string, integer} input
    * @returns {Boolean} True or False
-   */
+   */ 
   empty(input) {
     if (input === undefined || input === '') {
       return true;

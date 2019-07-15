@@ -1,3 +1,21 @@
 {
-    "extends": "airbnb-base"
+    "extends": "airbnb-base",
+    "rules": {
+        "no-console": 0,
+        "no-param-reassign": [2, {"props": false}],
+        "prefer-destructuring": 0,
+        "treatUndefinedAsUnspecified": 0,
+        "arrow-body-style": 0,
+        "comma-dangle": 0,
+        "linebreak-style": 0,
+        "global-require": 0,
+        "consistent-return":"off",
+        "camelcase":"off",
+        "eslint linebreak-style": [0, "error", "windows"],
+        },
+        "env": {
+        "commonjs": true,
+        "node": true,
+        "mocha": true
+        },
 }

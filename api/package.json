@@ -26,13 +26,7 @@
   },
   "homepage": "https://github.com/manlikezlatan/WayFarer#readme",
   "dependencies": {
-    "@babel/cli": "^7.5.0",
-    "@babel/core": "^7.5.0",
-    "@babel/node": "^7.5.0",
     "@babel/polyfill": "^7.4.4",
-    "@babel/preset-env": "^7.5.0",
-    "@babel/register": "^7.4.4",
-    "@babel/runtime": "^7.5.4",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "dotenv": "^8.0.0",
@@ -47,6 +41,13 @@
     "swagger-ui-express": "^4.0.7"
   },
   "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.0",
+    "@babel/node": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.5.0",
+    "@babel/preset-env": "^7.5.0",
+    "@babel/register": "^7.4.4",
+    "@babel/runtime": "^7.5.4",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
