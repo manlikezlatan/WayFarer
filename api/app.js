@@ -3,7 +3,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import '@babel/polyfill';
 import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
 
 // Import routes
 import usersRoute from './routes/userRoutes';
@@ -17,7 +16,6 @@ const app = express();
 const port = process.env.PORT || 7000;
 
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
