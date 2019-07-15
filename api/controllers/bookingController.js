@@ -1,6 +1,4 @@
-import moment from 'moment';
 import db from '../models/query';
-import Helper from '../services/helpers';
 
 const Bookings = {
 
@@ -8,24 +6,26 @@ const Bookings = {
      * Book a trip
      * @param {object} req
      * @param {object} res
-     * @returns {object} reflection object
+     * @returns {object} Bookings object
      */
   async createBooking(req, res) {
-    const { trip_id, bus_id, trip_date, seat_number } = req.body;
+    const {
+      trip_id, bus_id, trip_date, seat_number
+    } = req.body;
 
-    const { first_name, last_name, user_id, email } = req.user;
+    const {
+      first_name, last_name, user_id, email,
+    } = req.user;
 
-    const created_on = moment(new Date());
-
-    if (Helper.empty(trip_id) || Helper.empty(bus_id) || Helper.empty(trip_date) || Helper.empty(seat_number)) {
+    if (!trip_id) {
       return res.status(400).json({
         status: 'error',
-        error: 'All fields are required'
+        error: 'Kindly specify the trip number'
       });
     }
     const createBookingQuery = `INSERT INTO
-        booking(user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email, created_on)
-        VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        bookings(user_id, trip_id, bus_id, trip_date, seat_number, first_name, last_name, email)
+        VALUES($1, $2, $3, $4, $5, $6, $7, $8)
         returning *`;
     const values = [
       user_id,
@@ -36,16 +36,14 @@ const Bookings = {
       first_name,
       last_name,
       email,
-      created_on,
     ];
-
     try {
       const { rows } = await db.query(createBookingQuery, values);
-      const bookingDetails = rows[0];
+      const data = rows[0];
       return res.status(201).json({
         status: 'success',
         message: 'Booking successfully created',
-        data: { bookingDetails }
+        data
       });
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
@@ -56,22 +54,22 @@ const Bookings = {
       }
       return res.status(500).json({
         status: 'error',
-        error: 'Unable to create booking'
+        error: 'An error occured. Kindly try again with correct trip details'
       });
     }
   },
 
   /**
      * Get All Bookings
-     * @param {object} req 
-     * @param {object} res 
-     * @returns {object} buses array
+     * @param {object} req
+     * @param {object} res
+     * @returns {object} returns bookings
      */
 
   async getAllBookings(req, res) {
     const { is_admin, user_id } = req.user;
     if (!is_admin === true) {
-      const getAllBookingsQuery = 'SELECT * FROM booking WHERE user_id = $1';
+      const getAllBookingsQuery = 'SELECT * FROM bookings WHERE user_id = $1';
       try {
         const { rows } = await db.query(getAllBookingsQuery, [user_id]);
         if (rows[0] === undefined) {
@@ -80,54 +78,55 @@ const Bookings = {
             error: 'you have no bookings at the moment'
           });
         }
-        const userBookings = new Array.fill(rows);
+        const data = rows;
         return res.status(200).json({
           status: 'success',
-          data: userBookings
+          data
         });
       } catch (error) {
         return res.status(500).json({
           status: 'error',
-          error: 'Sorry, an error occured'
+          error: 'An error occured. Please try again later'
         });
       }
     }
 
-    //Admin can view all bookings
-    const getAllBookingsQuery = 'SELECT * FROM booking ORDER BY booking_id DESC';
+    // Admin can view all bookings
+    const getAllBookingsQuery = 'SELECT * FROM bookings ORDER BY booking_id ASC';
     try {
       const { rows } = await db.query(getAllBookingsQuery);
       if (rows[0] === undefined) {
-        return res.status(400).json({
+        return res.status(404).json({
           status: 'error',
           error: 'There are currently no bookings'
         });
       }
-      let allBookings = new Array.fill(rows);
+      const data = rows;
       return res.status(200).json({
         status: 'success',
-        data: allBookings
+        data
       });
     } catch (error) {
       return res.status(500).json({
         status: 'error',
-        error: 'Sorry, an error occured'
+        error: 'Sorry, an error occured. Please try again later'
       });
     }
   },
 
   /**
    * Delete A Booking
-   * @param {object} req 
-   * @param {object} res 
-   * @returns {void} return response booking deleted successfully
+   * @param {object} req
+   * @param {object} res
+   * @returns {void} returns booking deleted
    */
   async deleteBooking(req, res) {
     const { bookingId } = req.params;
     const { user_id } = req.user;
-    const deleteBookingQuery = 'DELETE FROM booking WHERE booking_id=$1 AND user_id = $2 returning *';
+    const deleteBookingQuery = 'DELETE FROM bookings WHERE booking_id = $1 AND user_id = $2 returning *';
     try {
       const { rows } = await db.query(deleteBookingQuery, [bookingId, user_id]);
+      console.log(rows);
       if (!rows[0]) {
         return res.status(404).json({
           status: 'error',
@@ -142,10 +141,10 @@ const Bookings = {
     } catch (error) {
       return res.status(500).json({
         status: 'error',
-        error: 'Sorry, an error occured'
+        error: 'Sorry, an error occured. Try again later'
       });
     }
   },
-}
+};
 
 export default Bookings;

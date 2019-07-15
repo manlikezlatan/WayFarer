@@ -1,10 +1,12 @@
 // load app dependencies
 import express from 'express';
 import dotenv from 'dotenv';
-import '@babel/polyfill'
+import '@babel/polyfill';
 import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+
+// Import routes
 import usersRoute from './routes/userRoutes';
-import adminRoute from './routes/adminRoutes';
 import tripRoute from './routes/tripRoutes';
 import busRoute from './routes/busRoutes';
 import bookingRoute from './routes/bookingRoutes';
@@ -15,6 +17,7 @@ const app = express();
 const port = process.env.PORT || 7000;
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
@@ -28,11 +31,10 @@ app.listen(port, () => {
   console.log(`This server is live on ${port}`);
 });
 
-app.use('/api/v1/signup', usersRoute);
-app.use('/api/v1/signin', usersRoute);
-app.use('/api/v1/admin/signup', adminRoute);
-app.use('/api/v1/trips', tripRoute);
-app.use('/api/v1/buses', busRoute);
-app.use('/api/v1/bookings', bookingRoute);
+app.use('/api/v1', usersRoute);
+app.use('/api/v1', usersRoute);
+app.use('/api/v1', tripRoute);
+app.use('/api/v1', busRoute);
+app.use('/api/v1', bookingRoute);
 
 export default app;

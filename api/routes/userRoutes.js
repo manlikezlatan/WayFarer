@@ -4,7 +4,10 @@ import Users from '../controllers/userController';
 const router = express.Router();
 
 // Users Routes
-router.post('/', Users.signup);
-router.post('/', Users.signin);
+router.post('/auth/signup', Users.signup);
+router.post('/auth/signin', Users.signin);
+
+// Admin Routes
+router.post('/admin/signup', Users.AdminSignup);
 
 export default router;
