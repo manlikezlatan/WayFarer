@@ -227,7 +227,7 @@ describe('/GET/ filter trips by origin', () => {
 
 // Filter trips with specific destination
 describe('/GET/ filter trips by destination', () => {
-  it('it should return a response of no trips if there are no trips with that destination', (done) => {
+  it('it should return no trips if there are no trips with that destination', (done) => {
     chai.request(app)
       .get('/api/v1/trips/destination?destination=Lagos')
       .set('token', token)

@@ -67,8 +67,8 @@ const Bookings = {
      */
 
   async getAllBookings(req, res) {
-    const { admin, user_id } = req.user;
-    if (!admin === true) {
+    const { is_admin, user_id } = req.user;
+    if (!is_admin === true) {
       const getAllBookingsQuery = 'SELECT * FROM bookings WHERE user_id = $1';
       try {
         const { rows } = await db.query(getAllBookingsQuery, [user_id]);
@@ -92,7 +92,7 @@ const Bookings = {
     }
 
     // Admin can view all bookings
-    const getAllBookingsQuery = 'SELECT * FROM bookings ORDER BY id ASC';
+    const getAllBookingsQuery = 'SELECT * FROM bookings ORDER BY booking_id ASC';
     try {
       const { rows } = await db.query(getAllBookingsQuery);
       if (rows[0] === undefined) {
@@ -123,7 +123,7 @@ const Bookings = {
   async deleteBooking(req, res) {
     const { bookingId } = req.params;
     const { user_id } = req.user;
-    const deleteBookingQuery = 'DELETE FROM bookings WHERE id = $1 AND user_id = $2 returning *';
+    const deleteBookingQuery = 'DELETE FROM bookings WHERE booking_id = $1 AND user_id = $2 returning *';
     try {
       const { rows } = await db.query(deleteBookingQuery, [bookingId, user_id]);
       console.log(rows);
@@ -164,9 +164,9 @@ const Bookings = {
         error: 'Choose a seat number'
       });
     }
-    const getBookingQuery = 'SELECT * FROM booking WHERE id=$1';
+    const getBookingQuery = 'SELECT * FROM booking WHERE booking_id=$1';
     const updateBookingSeat = `UPDATE bookings
-        SET seat_number=$1 WHERE user_id=$2 AND id=$3 returning *`;
+        SET seat_number=$1 WHERE user_id=$2 AND booking_id=$3 returning *`;
     try {
       const { rows } = await db.query(getBookingQuery, [bookingId]);
       if (!rows[0]) {

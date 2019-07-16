@@ -7,7 +7,7 @@
     "start": "nodemon --exec babel-node app.js",
     "create": "node .api/models/db createAllTables",
     "drop": "node .api/models/db dropAllTables",
-    "test": "nyc mocha --require @babel/register ./api/test/bookingTest.js --timeout 20000 --exit",
+    "test": "nyc mocha --require @babel/register ./api/test/**/*.js --timeout 20000 --exit",
     "build": "rm -rf ./build && babel -d ./build ./api -s",
     "generate-lcov": "nyc report --reporter=text-lcov | lcov.info",
     "coveralls-coverage": "coveralls | lcov.info",
