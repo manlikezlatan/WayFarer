@@ -175,7 +175,7 @@ describe('/DELETE/ Cancel trips', () => {
           res.should.have.status(400);
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('error').eql('There is no trip with that id');        
+          res.body.should.have.property('error').eql('There is no trip with that id');
         }
         done(err);
       });
@@ -192,6 +192,6 @@ describe('/DELETE/ Cancel trips', () => {
           res.body.data.should.have.property('message').eql('Trip cancelled successfully');
         }
         done(err);
-    });
+      });
   });
 });

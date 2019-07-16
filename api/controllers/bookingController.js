@@ -148,8 +148,8 @@ const Bookings = {
 
   /**
  * Update seat number on a booking
- * @param {object} req 
- * @param {object} res 
+ * @param {object} req
+ * @param {object} res
  * @returns {object} updated user
  */
   async updateSeat(req, res) {
@@ -178,7 +178,7 @@ const Bookings = {
       const values = [
         seat_number,
         user_id,
-        booking_id,
+        bookingId,
       ];
       const result = await db.query(updateBookingSeat, values);
       const data = result.rows[0];

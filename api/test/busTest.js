@@ -138,7 +138,7 @@ describe('/GET/ all buses', () => {
       .set('token', token)
       .end((err, res) => {
         if (res.body.data === undefined) {
-          res.should.have.status(status.notfound);
+          res.should.have.status(404);
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql('error');
           res.body.should.have.property('error').eql('There are no buses');

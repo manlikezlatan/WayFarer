@@ -148,7 +148,6 @@ describe('/DELETE/ delete a booking', () => {
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql('success');
           res.body.data.should.have.property('message').eql('Booking deleted successfully');
-
         }
         done(err);
       });
