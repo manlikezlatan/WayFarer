@@ -10,8 +10,8 @@ const should = chai.should();
 should;
 
 const fare = 3000.00;
-const bus_id = 1;
-const origin = 'Duai';
+const bus_id = 10;
+const origin = 'Dubai';
 const destination = 'London';
 const trip_date = moment(new Date());
 const token = jwt.sign(
@@ -125,7 +125,6 @@ describe('/POST create new trip', () => {
         res.should.have.status(201);
         res.body.should.be.a('object');
         res.body.should.have.property('status').eql('success');
-        res.body.should.have.property('message').eql('Trip created successfully');
         res.body.should.have.property('data');
         done(err);
       });
