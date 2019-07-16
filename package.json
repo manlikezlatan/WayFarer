@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --exec babel-node app.js",
-    "create": "node ./models/db createAllTables",
-    "drop": "node ./models/db dropAllTables",
-    "test": "nyc mocha --require @babel/register ./test/tripTest.js --timeout 20000 --exit",
+    "create": "node .api/models/db createAllTables",
+    "drop": "node .api/models/db dropAllTables",
+    "test": "nyc mocha --require @babel/register ./api/test/tripTest.js --timeout 20000 --exit",
     "build": "rm -rf ./build && babel -d ./build ./api -s",
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
@@ -42,6 +42,8 @@
     "moment": "^2.24.0",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "swagger-ui-express": "^4.0.7"
   },
   "devDependencies": {
@@ -52,8 +54,6 @@
     "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
     "@babel/runtime": "^7.5.4",
-    "chai": "^4.2.0",
-    "chai-http": "^4.3.0",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
