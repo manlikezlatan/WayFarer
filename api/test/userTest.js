@@ -466,7 +466,7 @@ describe('/POST create an admin', () => {
           res.should.have.status(404);
           res.body.should.be.a('object');
           res.body.should.have.property('status').eql('error');
-          res.body.should.have.property('error').eql('User with this email does not exist');
+          res.body.should.have.property('error').eql('The email or password you provided is incorrect');
           done(err);
         });
       process.exit(0);
