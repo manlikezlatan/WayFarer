@@ -32,15 +32,10 @@ const Users = {
         error: 'Please enter a valid password with more than eight(8) characters'
       });
     }
-
     const hashedPassword = Helper.hashPassword(password);
-
-    const createQuery = `INSERT INTO
-      users(email, first_name, last_name, password)
-      VALUES($1, $2, $3, $4)
-      returning *`;
+    const createQuery = `INSERT INTO users(email, first_name, last_name, password) VALUES($1, $2, $3, $4)
+        returning *`;
     const values = [email, first_name, last_name, hashedPassword];
-
     try {
       const { rows } = await db.query(createQuery, values);
       const id = rows[0].user_id;
