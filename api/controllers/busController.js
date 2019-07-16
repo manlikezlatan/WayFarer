@@ -24,7 +24,7 @@ const Buses = {
     if (!number_plate || !manufacturer || !model || !year || !capacity) {
       return res.status(400).json({
         status: 'error',
-        error: 'Kindly fill the required fields.'
+        error: 'Kindly fill the required fields'
       });
     }
     const createBusQuery = `INSERT INTO

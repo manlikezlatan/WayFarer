@@ -13,7 +13,7 @@ const auth = {
    * @returns {object|void} Token object
    */
   async verifyToken(req, res, next) {
-    const token = req.headers['x-access-token'];
+    const { token } = req.headers;
     if (!token) {
       return res.status(400).json({
         status: 'error',
@@ -22,20 +22,12 @@ const auth = {
     }
     try {
       const result = await jwt.verify(token, process.env.SECRET);
-      const query = 'SELECT * FROM users WHERE user_id = $1';
-      const { rows } = await db.query(query, [result.userId]);
-      if (!rows[0]) {
-        return res.status(400).json({
-          status: 'error',
-          error: 'The token you provided is invalid'
-        });
-      }
       req.user = {
         user_id: result.userId,
-        email: rows[0].email,
-        first_name: rows[0].first_name,
-        last_name: rows[0].last_name,
-        is_admin: rows[0].is_admin,
+        email: result.email,
+        first_name: result.first_name,
+        last_name: result.last_name,
+        is_admin: result.is_admin,
       };
       next();
     } catch (error) {
