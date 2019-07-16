@@ -20,7 +20,7 @@ const Bookings = {
     if (!trip_id) {
       return res.status(400).json({
         status: 'error',
-        error: 'Kindly specify the trip number'
+        error: 'Kindly enter a correct trip ID'
       });
     }
     const createBookingQuery = `INSERT INTO
@@ -115,7 +115,7 @@ const Bookings = {
   },
 
   /**
-   * Delete A Booking
+   * Delete booking
    * @param {object} req
    * @param {object} res
    * @returns {void} returns booking deleted
@@ -130,7 +130,7 @@ const Bookings = {
       if (!rows[0]) {
         return res.status(404).json({
           status: 'error',
-          error: 'You have no booking with that particular id'
+          error: 'You have no booking with the specified booking ID'
         });
       }
       return res.status(200).json({
@@ -142,6 +142,62 @@ const Bookings = {
       return res.status(500).json({
         status: 'error',
         error: 'Sorry, an error occured. Try again later'
+      });
+    }
+  },
+
+  /**
+ * Update seat number on a booking
+ * @param {object} req 
+ * @param {object} res 
+ * @returns {object} updated user
+ */
+  async updateSeat(req, res) {
+    const { bookingId } = req.params;
+    const { seat_number } = req.body;
+
+    const { user_id } = req.user;
+
+    if (!seat_number) {
+      return res.status(400).json({
+        status: 'error',
+        error: 'Choose a seat number'
+      });
+    }
+    const getBookingQuery = 'SELECT * FROM booking WHERE booking_id=$1';
+    const updateBookingSeat = `UPDATE bookings
+        SET seat_number=$1 WHERE user_id=$2 AND booking_id=$3 returning *`;
+    try {
+      const { rows } = await db.query(getBookingQuery, [bookingId]);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'This booking cannot be found'
+        });
+      }
+      const values = [
+        seat_number,
+        user_id,
+        booking_id,
+      ];
+      const result = await db.query(updateBookingSeat, values);
+      const data = result.rows[0];
+      delete data.seat_number;
+      return res.status(200).json({
+        status: 'success',
+        message: 'Booking updated successfully',
+        data
+      });
+    } catch (error) {
+      if (error.routine === '_bt_check_unique') {
+        return res.status(409).json({
+          status: 'error',
+          error: 'Your preferred seat number is already taken. Kindly choose another.'
+        });
+      }
+      return res.status(500).json({
+        status: 'error',
+        error: 'An error occured'
       });
     }
   },

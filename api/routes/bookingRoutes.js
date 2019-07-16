@@ -9,5 +9,6 @@ const router = express.Router();
 router.post('/bookings', auth.verifyToken, Bookings.createBooking);
 router.get('/bookings', auth.verifyToken, Bookings.getAllBookings);
 router.delete('/bookings/:bookingId', auth.verifyToken, Bookings.deleteBooking);
+router.put('/bookings/:bookingId', auth.verifyToken, Bookings.updateSeat);
 
 export default router;
