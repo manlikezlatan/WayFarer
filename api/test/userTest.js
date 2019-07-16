@@ -179,4 +179,188 @@ describe('/POST create an admin', () => {
         done(err);
       });
   });
+
+
+// Normal User sign up Testing
+describe('/POST sign up a user', () => {
+  it('it should not sign up a user without email', (done) => {
+    const user = {
+      first_name,
+      last_name,
+      password
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Kindly fill your complete details');
+        done(err);
+      });
+  });
+
+  it('it should not create a user without password', (done) => {
+    const user = {
+      email,
+      first_name,
+      last_name,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Kindly fill your complete details');
+        done(err);
+      });
+  });
+
+  it('it should not create a user without first name', (done) => {
+    const user = {
+      first_name: '',
+      last_name,
+      password,
+      email,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Kindly fill your complete details');
+        done(err);
+      });
+  });
+
+  it('it should not create a user without last name', (done) => {
+    const user = {
+      password,
+      first_name,
+      last_name: '',
+      email,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Kindly fill your complete details');
+        done(err);
+      });
+  });
+
+  it('it should not create a user without any of email, password, first name or password', (done) => {
+    const user = {
+      email: '',
+      first_name: '',
+      last_name: '',
+      password: '',
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Kindly fill your complete details');
+        done(err);
+      });
+  });
+
+  it('it should not post a user, if user already exists', (done) => {
+    const user = {
+      email,
+      password,
+      first_name,
+      last_name,
+    };
+    pool.query('INSERT INTO users(email, password, first_name, last_name) values($1, $2, $3, $4)', [email, password, first_name, last_name], () => {
+      chai.request(app)
+        .post('/api/v1/auth/signup')
+        .set('Accept', 'application/json')
+        .send(user)
+        .end((err, res) => {
+          res.should.have.status(409);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('User with that email already exist');
+          done(err);
+        });
+    });
+  });
+  it('it should not post a user, if email is not valid', (done) => {
+    const user = {
+      email: 'face.com',
+      first_name,
+      last_name,
+      password,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter a valid email address');
+        done(err);
+      });
+  });
+
+  it('it should not post a user, if password is not valid', (done) => {
+    const user = {
+      email,
+      password: 'pass',
+      first_name,
+      last_name,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter a valid password with more than eight(8) characters');
+        done(err);
+      });
+  });
+
+  it('it should post a user', (done) => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      first_name: faker.name.firstName(),
+      last_name: faker.name.lastName(),
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signup')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(201);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.should.have.property('data');
+        res.body.data.should.have.property('token');
+        done(err);
+      });
+  });
+});
 });
