@@ -26,7 +26,7 @@ This Project was created with:
 ## Installation
 -Clone the repo or download the zip file
 -git clone "https://github.com/manlikezlatan/WayFarer.git"
--cd Property-Pro-Lite
+-cd Wayfarer
 -run npm install
 -run npm run start
 

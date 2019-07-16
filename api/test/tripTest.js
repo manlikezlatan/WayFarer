@@ -194,3 +194,63 @@ describe('/DELETE/ Cancel trips', () => {
       });
   });
 });
+
+// Filter trips with specific origin
+describe('/GET/ filter trips by origin', () => {
+  it('it should return no trips if there are no trips with that origin', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips/origin?origin=Spain')
+      .set('token', token)
+      .end((err, res) => {
+        if (res.body.data === undefined) {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('No trips with that origin');
+        }
+        done(err);
+      });
+  });
+  it('it should GET trips with that origin', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips/origin?origin=Dubai')
+      .set('token', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.should.have.property('data');
+        done(err);
+      });
+  });
+});
+
+// Filter trips with specific destination
+describe('/GET/ filter trips by destination', () => {
+  it('it should return a response of no trips if there are no trips with that destination', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips/destination?destination=Lagos')
+      .set('token', token)
+      .end((err, res) => {
+        if (res.body.data === undefined) {
+          res.should.have.status(404);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('No Trips with that destination');
+        }
+        done(err);
+      });
+  });
+  it('it should GET trips with that origin', (done) => {
+    chai.request(app)
+      .get('/api/v1/trips/destination?destination=London')
+      .set('token', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.should.have.property('data');
+        done(err);
+      });
+  });
+});
