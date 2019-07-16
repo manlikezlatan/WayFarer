@@ -1,5 +1,14 @@
 api/node_modules/
 node_modules
-api/.nyc_output
-./.nyc_output
+
+# Coverage directory
+coverage
+*.lcov
+.coveralls.yml
+
+# nyc test coverage
 .nyc_output
+.nyc_output/processinfo
+
+# build folder used by travis
+build
