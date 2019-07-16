@@ -13,9 +13,9 @@ const Buses = {
       number_plate, manufacturer, model, year, capacity
     } = req.body;
 
-    const { is_admin } = req.user;
+    const { admin } = req.user;
 
-    if (!is_admin === true) {
+    if (!admin === true) {
       return res.status(401).json({
         status: 'error',
         error: 'Sorry, you are not authorized to edit or add a bus details'
@@ -62,15 +62,15 @@ const Buses = {
      * @returns {object} buses array
      */
   async getAllBuses(req, res) {
-    const { is_admin } = req.user;
+    const { admin } = req.user;
 
-    if (!is_admin === true) {
+    if (!admin === true) {
       return res.status(401).json({
         status: 'error',
         error: 'Sorry You are unauthorized to view all buses'
       });
     }
-    const getAllBusQuery = 'SELECT * FROM buses ORDER BY bus_id ASC';
+    const getAllBusQuery = 'SELECT * FROM buses ORDER BY id ASC';
     try {
       const { rows } = await db.query(getAllBusQuery);
       const data = rows;

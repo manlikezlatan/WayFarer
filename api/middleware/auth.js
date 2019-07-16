@@ -26,7 +26,7 @@ const auth = {
         email: result.email,
         first_name: result.first_name,
         last_name: result.last_name,
-        is_admin: result.is_admin,
+        admin: result.is_admin,
       };
       next();
     } catch (error) {

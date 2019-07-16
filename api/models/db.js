@@ -15,7 +15,7 @@ pool.on('connect', () => {
  */
 const createUsersTable = () => {
   const userCreateQuery = `CREATE TABLE IF NOT EXISTS users
-    (user_id BIGSERIAL PRIMARY KEY, 
+    (id BIGSERIAL PRIMARY KEY, 
     email VARCHAR(100) UNIQUE NOT NULL, 
     first_name VARCHAR(100), 
     last_name VARCHAR(100), 
@@ -39,7 +39,7 @@ const createUsersTable = () => {
  */
 const createBusesTable = () => {
   const userCreateQuery = `CREATE TABLE IF NOT EXISTS buses
-    (bus_id BIGSERIAL PRIMARY KEY, 
+    (id BIGSERIAL PRIMARY KEY, 
     number_plate VARCHAR(100) NOT NULL,
     manufacturer VARCHAR(100) NOT NULL,
     model VARCHAR(100) NOT NULL,
@@ -63,8 +63,8 @@ const createBusesTable = () => {
  */
 const createTripsTable = () => {
   const tripsCreateQuery = `CREATE TABLE IF NOT EXISTS trips 
-    (trip_id BIGSERIAL PRIMARY KEY,
-    bus_id BIGINT REFERENCES buses(bus_id) NOT NULL,
+    (id BIGSERIAL PRIMARY KEY,
+    bus_id BIGINT REFERENCES buses(id) NOT NULL,
     origin VARCHAR(255) NOT NULL,
     destination VARCHAR(255) NOT NULL,
     trip_date DATE NOT NULL,
@@ -88,16 +88,16 @@ const createTripsTable = () => {
  */
 const createBookingsTable = () => {
   const bookingCreateQuery = `CREATE TABLE IF NOT EXISTS bookings
-  (booking_id BIGSERIAL NOT NULL, 
-    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE, 
-    trip_id INTEGER REFERENCES trips(trip_id) ON DELETE CASCADE, 
-    bus_id INTEGER REFERENCES buses(bus_id) ON DELETE CASCADE, 
+  (id BIGSERIAL NOT NULL, 
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, 
+    trip_id INTEGER REFERENCES trips(id) ON DELETE CASCADE, 
+    bus_id INTEGER REFERENCES buses(id) ON DELETE CASCADE, 
     trip_date DATE NOT NULL, seat_number INTEGER UNIQUE, 
     first_name VARCHAR(100) NOT NULL, 
     last_name VARCHAR(100) NOT NULL, 
     email VARCHAR(100) NOT NULL, 
     created_on TIMESTAMP DEFAULT current_timestamp NOT NULL, 
-    PRIMARY KEY(trip_id, user_id)
+    PRIMARY KEY(id, trip_id, user_id)
   )`;
 
   pool.query(bookingCreateQuery)

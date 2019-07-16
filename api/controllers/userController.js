@@ -38,8 +38,8 @@ const Users = {
     const values = [email, first_name, last_name, hashedPassword];
     try {
       const { rows } = await db.query(createQuery, values);
-      const id = rows[0].user_id;
-      const is_admin = rows[0].is_admin;
+      const id = rows[0].id;
+      const is_admin = rows[0].admin;
       const token = Helper.generateToken(id);
       return res.status(201).json({
         status: 'success',
@@ -117,8 +117,8 @@ const Users = {
     try {
       const { rows } = await db.query(createAdminQuery, values);
       delete rows[0].password;
-      const userId = rows[0].user_id;
-      const token = Helper.generateToken(rows[0].user_id);
+      const userId = rows[0].id;
+      const token = Helper.generateToken(rows[0].id);
       return res.status(201).json({
         status: 'success',
         message: 'An admin has been created successfully',
@@ -177,14 +177,14 @@ const Users = {
           error: 'The password you provided is incorrect'
         });
       }
-      const token = Helper.generateToken(rows[0].user_id);
-      const id = rows[0].user_id;
-      const is_admin = rows[0].is_admin;
+      const token = Helper.generateToken(rows[0].id);
+      const id = rows[0].id;
+      const admin = rows[0].admin;
       return res.status(200).json({
         status: 'success',
         data: {
           id,
-          is_admin,
+          admin,
           token
         }
       });
