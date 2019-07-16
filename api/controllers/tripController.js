@@ -13,9 +13,9 @@ const Trips = {
       bus_id, origin, destination, trip_date, fare
     } = req.body;
 
-    const { admin } = req.user;
+    const { is_admin } = req.user;
 
-    if (!admin === true) {
+    if (!is_admin === true) {
       return res.status(401).json({
         status: 'error',
         error: 'Sorry, you are not authorized to create a trip'
@@ -62,17 +62,17 @@ const Trips = {
    */
   async cancelTrip(req, res) {
     const { tripId } = req.params;
-    const { admin } = req.user;
+    const { is_admin } = req.user;
 
     console.log(req.params);
 
-    if (!admin === true) {
+    if (!is_admin === true) {
       return res.status(401).json({
         status: 'error',
         error: 'Sorry, you are not authorized to cancel a trip'
       });
     }
-    const deleteTripQuery = 'DELETE FROM trips WHERE id=$1 returning *';
+    const deleteTripQuery = 'DELETE FROM trips WHERE trip_id=$1 returning *';
     try {
       const { rows } = await db.query(deleteTripQuery, [tripId]);
       console.log(rows);
@@ -132,7 +132,7 @@ const Trips = {
  */
   async filterByOrigin(req, res) {
     const { origin } = req.query;
-    const findTripQuery = 'SELECT * FROM trips WHERE origin=$1 ORDER BY id DESC';
+    const findTripQuery = 'SELECT * FROM trips WHERE origin=$1 ORDER BY trip_id DESC';
     try {
       const { rows } = await db.query(findTripQuery, [origin]);
       const data = rows;
@@ -162,7 +162,7 @@ const Trips = {
  */
   async filterByDestination(req, res) {
     const { destination } = req.query;
-    const findTripQuery = 'SELECT * FROM trips WHERE destination=$1 ORDER BY id DESC';
+    const findTripQuery = 'SELECT * FROM trips WHERE destination=$1 ORDER BY trip_id DESC';
     try {
       const { rows } = await db.query(findTripQuery, [destination]);
       if (!rows[0]) {
