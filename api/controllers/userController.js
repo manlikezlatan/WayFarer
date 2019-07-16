@@ -29,7 +29,7 @@ const Users = {
     if (!Helper.validatePassword(password)) {
       return res.status(400).json({
         status: 'error',
-        error: 'Password must be more than eight(8) characters'
+        error: 'Please enter a valid password with more than eight(8) characters'
       });
     }
 
@@ -57,9 +57,9 @@ const Users = {
       });
     } catch (error) {
       if (error.routine === '_bt_check_unique') {
-        return res.status(400).json({
+        return res.status(409).json({
           status: 'error',
-          error: 'User with that EMAIL already exist'
+          error: 'User with that email already exist'
         });
       }
       return res.status(500).json({
@@ -82,28 +82,28 @@ const Users = {
     } = req.body;
 
     if (!is_admin === true) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: 'error',
-        error: 'Sorry, you are not authorized to create an admin'
+        error: 'Unauthorized'
       });
     }
 
     if (!email || !first_name || !last_name || !password) {
       return res.status(400).json({
         status: 'error',
-        error: 'Email, password, first name and last name field cannot be empty'
+        error: 'Email, password, first name and last name are required'
       });
     }
     if (!Helper.isValidEmail(email)) {
       return res.status(400).json({
         status: 'error',
-        error: 'Please enter a valid Email'
+        error: 'Please enter a valid email address'
       });
     }
     if (!Helper.validatePassword(password)) {
       return res.status(400).json({
         status: 'error',
-        error: 'Password must be more than eight(8) characters'
+        error: 'Please enter a valid password with more than eight(8) characters'
       });
     }
     const hashedPassword = Helper.hashPassword(password);
@@ -126,7 +126,7 @@ const Users = {
       const token = Helper.generateToken(rows[0].user_id);
       return res.status(201).json({
         status: 'success',
-        message: 'An admin has been created successful',
+        message: 'An admin has been created successfully',
         data: {
           userId,
           token
@@ -136,7 +136,7 @@ const Users = {
       if (error.routine === '_bt_check_unique') {
         return res.status(409).json({
           status: 'error',
-          error: 'Admin with that EMAIL already exist'
+          error: 'Admin with that email already exist'
         });
       }
       return res.status(400).json({

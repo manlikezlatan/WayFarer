@@ -17,7 +17,7 @@ const Helper = {
    * @returns {Boolean} True or False
    */
   validatePassword(password) {
-    if (password.length <= 8 || password === '') {
+    if (password.length <= 8 || password === '' || /\s/.test(password) === true ) {
       return false;
     } return true;
   },
