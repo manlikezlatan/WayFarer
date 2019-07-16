@@ -363,4 +363,114 @@ describe('/POST sign up a user', () => {
       });
   });
 });
+
+// User sign in testing
+describe('/POST Sign user in', () => {
+  it('it should not log in a user without email', (done) => {
+    const user = {
+      password,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter your email and password');
+        done(err);
+      });
+  });
+
+  it('it should not log in a user without password', (done) => {
+    const user = {
+      email,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter your email and password');
+        done(err);
+      });
+  });
+
+  it('it should not log a user in, if email is empty', (done) => {
+    const user = {
+      email: '',
+      password,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter your email and password');
+        done(err);
+      });
+  });
+
+  it('it should not log a user in, if email is incorrect', (done) => {
+    const user = {
+      email: 'test.com',
+      password,
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('Please enter a valid email address');
+        done(err);
+      });
+  });
+
+  it('it should not log a user in, if password is not valid or correct', (done) => {
+    const user = {
+      email,
+      password: 'pass',
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(400);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('The email or password you provided is incorrect');
+        done(err);
+      });
+  });
+
+  it('it should not log a user in if user does not exist', (done) => {
+    const user = {
+      email: faker.internet.email(),
+      password: faker.internet.password(8),
+    };
+    chai.request(app)
+      .post('/api/v1/auth/signin')
+      .set('Accept', 'application/json')
+      .send(user)
+      .end((err, res) => {
+        res.should.have.status(404);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('error');
+        res.body.should.have.property('error').eql('User with this email does not exist');
+        done(err);
+      });
+    process.exit(0);
+  });
+});
 });
