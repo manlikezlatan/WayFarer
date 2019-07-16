@@ -1,4 +1,5 @@
 api/node_modules/
 node_modules
-./api/.nyc_output
+api/.nyc_output
 ./.nyc_output
+.nyc_output
