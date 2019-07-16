@@ -24,7 +24,7 @@ const Trips = {
     if (!bus_id || !origin || !destination || !trip_date || !fare) {
       return res.status(400).json({
         status: 'error',
-        error: 'Kindly fill the all required fields'
+        error: 'Kindly fill the all required details for the trip'
       });
     }
     const createtripQuery = `INSERT INTO 
@@ -47,7 +47,7 @@ const Trips = {
         data
       });
     } catch (error) {
-      return res.status(400).json({
+      return res.status(500).json({
         status: 'error',
         error: 'Unable to create trip'
       });
@@ -64,8 +64,10 @@ const Trips = {
     const { tripId } = req.params;
     const { is_admin } = req.user;
 
+    console.log(req.params);
+
     if (!is_admin === true) {
-      return res.status(400).json({
+      return res.status(401).json({
         status: 'error',
         error: 'Sorry, you are not authorized to cancel a trip'
       });
@@ -73,8 +75,9 @@ const Trips = {
     const deleteTripQuery = 'DELETE FROM trips WHERE trip_id=$1 returning *';
     try {
       const { rows } = await db.query(deleteTripQuery, [tripId]);
+      console.log(rows);
       if (!rows[0]) {
-        return res.status(404).json({
+        return res.status(400).json({
           status: 'error',
           error: 'There is no trip with that id'
         });
@@ -116,7 +119,7 @@ const Trips = {
     } catch (error) {
       return res.status(500).json({
         status: 'error',
-        error: 'An error Occured, please try again later'
+        error: 'An error occured, please try again later'
       });
     }
   },

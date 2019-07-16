@@ -4,7 +4,7 @@
   "description": "A public transportation booking app",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --require @babel/register ./test/busTest.js --timeout 20000 --exit",
+    "test": "nyc mocha --require @babel/register ./test/tripTest.js --timeout 20000 --exit",
     "start": "nodemon --exec babel-node app.js",
     "create": "node ./models/db createAllTables",
     "drop": "node ./models/db dropAllTables"
