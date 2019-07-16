@@ -132,8 +132,7 @@ const Trips = {
  */
   async filterByOrigin(req, res) {
     const { origin } = req.query;
-
-    const findTripQuery = 'SELECT * FROM trip WHERE origin=$1 ORDER BY id DESC';
+    const findTripQuery = 'SELECT * FROM trips WHERE origin=$1 ORDER BY trip_id DESC';
     try {
       const { rows } = await db.query(findTripQuery, [origin]);
       const data = rows;
@@ -163,8 +162,7 @@ const Trips = {
  */
   async filterByDestination(req, res) {
     const { destination } = req.query;
-
-    const findTripQuery = 'SELECT * FROM trip WHERE destination=$1 ORDER BY id DESC';
+    const findTripQuery = 'SELECT * FROM trips WHERE destination=$1 ORDER BY trip_id DESC';
     try {
       const { rows } = await db.query(findTripQuery, [destination]);
       if (!rows[0]) {
