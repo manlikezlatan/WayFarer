@@ -5,6 +5,7 @@
         "no-param-reassign": [2, {"props": false}],
         "prefer-destructuring": 0,
         "treatUndefinedAsUnspecified": 0,
+        "no-unused-expressions":"off",
         "arrow-body-style": 0,
         "comma-dangle": 0,
         "linebreak-style": 0,
@@ -12,6 +13,7 @@
         "consistent-return":"off",
         "camelcase":"off",
         "eslint linebreak-style": [0, "error", "windows"],
+        "indent": ["error", 2]
         },
         "env": {
         "commonjs": true,

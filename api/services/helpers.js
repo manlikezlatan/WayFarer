@@ -8,7 +8,7 @@ const Helper = {
    * @returns {string} returns hashed password
    */
   hashPassword(password) {
-    return bcrypt.hashSync(password, bcrypt.genSaltSync(8))
+    return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
   },
 
   /**
@@ -17,15 +17,15 @@ const Helper = {
    * @returns {Boolean} True or False
    */
   validatePassword(password) {
-    if (password.length <= 8 || password === '' || /\s/.test(password) === true ) {
+    if (password.length <= 8 || password === '' || /\s/.test(password) === true) {
       return false;
     } return true;
   },
 
   /**
    * comparePassword
-   * @param {string} hashPassword 
-   * @param {string} password 
+   * @param {string} hashPassword
+   * @param {string} password
    * @returns {Boolean} return True or False
    */
   comparePassword(hashPassword, password) {
@@ -57,7 +57,7 @@ const Helper = {
    * empty helper method
    * @param {string, integer} input
    * @returns {Boolean} True or False
-   */ 
+   */
   empty(input) {
     if (input === undefined || input === '') {
       return true;
@@ -73,10 +73,9 @@ const Helper = {
     const token = jwt.sign({
       userId: id
     },
-      process.env.SECRET, { expiresIn: '7d' }
-    );
+    process.env.SECRET, { expiresIn: '10d' });
     return token;
   }
-}
+};
 
 export default Helper;
