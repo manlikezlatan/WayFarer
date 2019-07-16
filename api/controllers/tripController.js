@@ -123,6 +123,68 @@ const Trips = {
       });
     }
   },
+
+  /**
+ * filter trips by origin
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} returned trips
+ */
+  async filterByOrigin(req, res) {
+    const { origin } = req.query;
+
+    const findTripQuery = 'SELECT * FROM trip WHERE origin=$1 ORDER BY id DESC';
+    try {
+      const { rows } = await db.query(findTripQuery, [origin]);
+      const data = rows;
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'No Trips with that origin'
+        });
+      }
+      return res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Operation unsuccessful'
+      });
+    }
+  },
+
+  /**
+ * filter trips by destination
+ * @param {object} req
+ * @param {object} res
+ * @returns {object} returned trips
+ */
+  async filterByDestination(req, res) {
+    const { destination } = req.query;
+
+    const findTripQuery = 'SELECT * FROM trip WHERE destination=$1 ORDER BY id DESC';
+    try {
+      const { rows } = await db.query(findTripQuery, [destination]);
+      if (!rows[0]) {
+        return res.status(404).json({
+          status: 'error',
+          error: 'No Trips with that destination'
+        });
+      }
+      const data = rows;
+      return res.status(200).json({
+        status: 'success',
+        data
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        error: 'Unsuccessful'
+      });
+    }
+  },
 };
 
 export default Trips;
