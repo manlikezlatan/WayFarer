@@ -129,3 +129,33 @@ describe('/POST add a bus', () => {
       });
   });
 });
+
+// Get all buses
+describe('/GET/ all buses', () => {
+  it('it should return a response of no buses if there are no buses yet', (done) => {
+    chai.request(app)
+      .get('/api/v1/buses')
+      .set('token', token)
+      .end((err, res) => {
+        if (res.body.data === undefined) {
+          res.should.have.status(status.notfound);
+          res.body.should.be.a('object');
+          res.body.should.have.property('status').eql('error');
+          res.body.should.have.property('error').eql('There are no buses');
+        }
+        done(err);
+      });
+  });
+  it('it should make an admin GET all buses', (done) => {
+    chai.request(app)
+      .get('/api/v1/buses')
+      .set('token', token)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('status').eql('success');
+        res.body.should.have.property('data');
+        done(err);
+      });
+  });
+});
